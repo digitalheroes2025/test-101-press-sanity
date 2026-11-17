@@ -8,8 +8,9 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "dev": "sanity dev",
-    "start": "sanity start"
+    "dev": "sanity dev --host 127.0.0.1 --port 3333",
+    "start": "sanity start",
+    "seed": "sanity dataset import seed/seed-data.ndjson production --replace"
   },
   "keywords": [
     "sanity"
