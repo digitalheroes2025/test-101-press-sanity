@@ -20,15 +20,7 @@ export const pressItem = defineType({
     defineField({
       name: 'category',
       type: 'string',
-      options: {
-        list: [
-          {title: 'Presse (coverage)', value: 'coverage'},
-          {title: 'Pressemitteilung', value: 'release'},
-          {title: 'Podcast', value: 'podcast'},
-        ],
-        layout: 'radio',
-      },
-      validation: (rule) => rule.required(),
+      hidden: true,
     }),
     defineField({
       name: 'outlet',

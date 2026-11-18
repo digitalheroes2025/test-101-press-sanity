@@ -1,44 +1,30 @@
 import {DocumentIcon} from '@sanity/icons/Document'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
-const EDITIONS = [
-  {title: 'Deutschland', value: 'deutschland'},
-  {title: 'Schweiz', value: 'schweiz'},
-  {title: 'Austria', value: 'austria'},
-] as const
-
-const LANGUAGES = [
-  {title: 'Deutsch', value: 'de'},
-  {title: 'English', value: 'en'},
-] as const
+import {EDITIONS} from '../constants'
 
 export const pressPage = defineType({
   name: 'pressPage',
   title: 'Press Page',
   type: 'document',
   icon: DocumentIcon,
-  groups: [
-    {name: 'content', title: 'Content', default: true},
-    {name: 'pressItems', title: 'Press Items'},
-    {name: 'ads', title: 'Ads'},
-    {name: 'seo', title: 'SEO'},
-  ],
+  groups: [{name: 'seo', title: 'SEO'}],
   fields: [
     defineField({
       name: 'title',
       title: 'Titel',
       type: 'string',
-      group: 'content',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'language',
       title: 'Language',
       type: 'string',
-      group: 'content',
       options: {
-        list: [...LANGUAGES],
-        layout: 'radio',
+        list: [
+          {title: 'Deutsch', value: 'de'},
+          {title: 'English', value: 'en'},
+        ],
       },
       initialValue: 'de',
       validation: (rule) => rule.required(),
@@ -47,7 +33,6 @@ export const pressPage = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      group: 'content',
       options: {
         source: 'title',
         maxLength: 96,
@@ -58,111 +43,32 @@ export const pressPage = defineType({
       name: 'edition',
       title: 'Edition',
       type: 'string',
-      group: 'content',
       options: {
-        list: [...EDITIONS],
+        list: [
+          {title: 'Deutschland', value: 'deutschland'},
+          {title: 'Schweiz', value: 'schweiz'},
+          {title: 'Austria', value: 'austria'},
+        ],
       },
       initialValue: 'deutschland',
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'companyName',
-      title: 'Company Name',
-      type: 'string',
-      group: 'content',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'contactName',
-      type: 'string',
-      group: 'content',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'address',
-      title: 'Address',
-      type: 'contactDetail',
-      group: 'content',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'phone',
-      title: 'Phone',
-      type: 'contactDetail',
-      group: 'content',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'email',
-      title: 'Email',
-      type: 'contactDetail',
-      group: 'content',
-      validation: (rule) =>
-        rule.required().custom((value) => {
-          const text = (value as {text?: string} | undefined)?.text
-          if (!text) return 'Email text is required'
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) return 'Must be a valid email'
-          return true
-        }),
-    }),
-    defineField({
-      name: 'presseHeading',
-      type: 'string',
-      group: 'content',
-      initialValue: 'Presse',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'presseSubheading',
-      type: 'string',
-      group: 'content',
-    }),
-    defineField({
-      name: 'releasesHeading',
-      type: 'string',
-      group: 'content',
-      initialValue: 'Pressemitteilungen',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'podcastsHeading',
-      type: 'string',
-      group: 'content',
-      initialValue: 'Podcasts',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'items',
-      title: 'Press Items',
+      name: 'components',
+      title: 'Components',
       type: 'array',
-      group: 'pressItems',
-      of: [defineArrayMember({type: 'pressItem'})],
-    }),
-    defineField({
-      name: 'bottomAd',
-      title: 'Bottom ad',
-      type: 'object',
-      group: 'ads',
-      fields: [
-        defineField({
-          name: 'image',
-          type: 'image',
-          options: {hotspot: true},
+      of: [
+        defineArrayMember({
+          type: 'pressContactSection',
+          options: {modal: {type: 'dialog'}},
         }),
-        defineField({
-          name: 'externalImageUrl',
-          title: 'External image URL',
-          type: 'url',
+        defineArrayMember({
+          type: 'pressListSection',
+          options: {modal: {type: 'dialog'}},
         }),
-        defineField({
-          name: 'alt',
-          type: 'string',
-          initialValue: 'Anzeige',
-        }),
-        defineField({
-          name: 'href',
-          title: 'Link URL',
-          type: 'url',
+        defineArrayMember({
+          type: 'adBannerSection',
+          options: {modal: {type: 'dialog'}},
         }),
       ],
     }),

@@ -1,5 +1,6 @@
 import {DocumentIcon} from '@sanity/icons/Document'
 import {DocumentsIcon} from '@sanity/icons/Documents'
+import {ImageIcon} from '@sanity/icons/Image'
 import type {StructureResolver} from 'sanity/structure'
 
 export const structure: StructureResolver = (S) =>
@@ -22,6 +23,27 @@ export const structure: StructureResolver = (S) =>
                     .defaultOrdering([
                       {field: 'edition', direction: 'asc'},
                       {field: 'language', direction: 'asc'},
+                      {field: 'title', direction: 'asc'},
+                    ]),
+                ),
+            ]),
+        ),
+      S.listItem()
+        .title('Collections')
+        .icon(DocumentsIcon)
+        .child(
+          S.list()
+            .title('Collections')
+            .items([
+              S.listItem()
+                .title('Ads')
+                .icon(ImageIcon)
+                .child(
+                  S.documentTypeList('ad')
+                    .title('Ads')
+                    .defaultOrdering([
+                      {field: 'edition', direction: 'asc'},
+                      {field: 'format', direction: 'asc'},
                       {field: 'title', direction: 'asc'},
                     ]),
                 ),
