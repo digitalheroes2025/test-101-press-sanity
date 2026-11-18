@@ -1,4 +1,5 @@
 import {DocumentIcon} from '@sanity/icons/Document'
+import {DocumentsIcon} from '@sanity/icons/Documents'
 import type {StructureResolver} from 'sanity/structure'
 
 export const structure: StructureResolver = (S) =>
@@ -6,7 +7,24 @@ export const structure: StructureResolver = (S) =>
     .title('Content')
     .items([
       S.listItem()
-        .title('Press Page')
-        .icon(DocumentIcon)
-        .child(S.document().schemaType('pressPage').documentId('pressPage').title('Press Page')),
+        .title('Pages')
+        .icon(DocumentsIcon)
+        .child(
+          S.list()
+            .title('Pages')
+            .items([
+              S.listItem()
+                .title('Press Pages')
+                .icon(DocumentIcon)
+                .child(
+                  S.documentTypeList('pressPage')
+                    .title('Press Pages')
+                    .defaultOrdering([
+                      {field: 'edition', direction: 'asc'},
+                      {field: 'language', direction: 'asc'},
+                      {field: 'title', direction: 'asc'},
+                    ]),
+                ),
+            ]),
+        ),
     ])

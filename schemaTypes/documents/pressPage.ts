@@ -1,18 +1,73 @@
 import {DocumentIcon} from '@sanity/icons/Document'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+const EDITIONS = [
+  {title: 'Deutschland', value: 'deutschland'},
+  {title: 'Schweiz', value: 'schweiz'},
+  {title: 'Austria', value: 'austria'},
+] as const
+
+const LANGUAGES = [
+  {title: 'Deutsch', value: 'de'},
+  {title: 'English', value: 'en'},
+] as const
+
 export const pressPage = defineType({
   name: 'pressPage',
+  title: 'Press Page',
   type: 'document',
   icon: DocumentIcon,
   groups: [
     {name: 'content', title: 'Content', default: true},
     {name: 'pressItems', title: 'Press Items'},
+    {name: 'ads', title: 'Ads'},
     {name: 'seo', title: 'SEO'},
   ],
   fields: [
     defineField({
-      name: 'agencyName',
+      name: 'title',
+      title: 'Titel',
+      type: 'string',
+      group: 'content',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      group: 'content',
+      options: {
+        list: [...LANGUAGES],
+        layout: 'radio',
+      },
+      initialValue: 'de',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      group: 'content',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'edition',
+      title: 'Edition',
+      type: 'string',
+      group: 'content',
+      options: {
+        list: [...EDITIONS],
+      },
+      initialValue: 'deutschland',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'companyName',
+      title: 'Company Name',
       type: 'string',
       group: 'content',
       validation: (rule) => rule.required(),
@@ -77,10 +132,17 @@ export const pressPage = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'items',
+      title: 'Press Items',
+      type: 'array',
+      group: 'pressItems',
+      of: [defineArrayMember({type: 'pressItem'})],
+    }),
+    defineField({
       name: 'bottomAd',
       title: 'Bottom ad',
       type: 'object',
-      group: 'content',
+      group: 'ads',
       fields: [
         defineField({
           name: 'image',
@@ -105,29 +167,41 @@ export const pressPage = defineType({
       ],
     }),
     defineField({
-      name: 'items',
-      title: 'Press Items',
-      type: 'array',
-      group: 'pressItems',
-      of: [defineArrayMember({type: 'pressItem'})],
-    }),
-    defineField({
-      name: 'seoTitle',
-      type: 'string',
-      title: 'SEO Title',
+      name: 'seo',
+      title: 'SEO Settings',
+      type: 'seo',
       group: 'seo',
-    }),
-    defineField({
-      name: 'seoDescription',
-      type: 'text',
-      title: 'SEO Description',
-      group: 'seo',
-      rows: 3,
     }),
   ],
+  orderings: [
+    {
+      title: 'Title',
+      name: 'titleAsc',
+      by: [{field: 'title', direction: 'asc'}],
+    },
+    {
+      title: 'Edition',
+      name: 'editionAsc',
+      by: [
+        {field: 'edition', direction: 'asc'},
+        {field: 'language', direction: 'asc'},
+      ],
+    },
+  ],
   preview: {
-    prepare() {
-      return {title: 'Press Page'}
+    select: {
+      title: 'title',
+      language: 'language',
+      edition: 'edition',
+    },
+    prepare({title, language, edition}) {
+      const editionLabel =
+        EDITIONS.find((item) => item.value === edition)?.title || edition || 'Edition'
+      const languageLabel = language ? `[${language}]` : ''
+      return {
+        title: title || 'Press Page',
+        subtitle: `${editionLabel} ${languageLabel}`.trim(),
+      }
     },
   },
 })
