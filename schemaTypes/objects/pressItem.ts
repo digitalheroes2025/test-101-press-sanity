@@ -3,7 +3,8 @@ import {defineField, defineType} from 'sanity'
 
 export const pressItem = defineType({
   name: 'pressItem',
-  type: 'document',
+  title: 'Press Item',
+  type: 'object',
   icon: TagIcon,
   fields: [
     defineField({
@@ -76,13 +77,6 @@ export const pressItem = defineType({
           return true
         }),
     }),
-  ],
-  orderings: [
-    {
-      title: 'Published date, newest',
-      name: 'publishedAtDesc',
-      by: [{field: 'publishedAt', direction: 'desc'}],
-    },
   ],
   preview: {
     select: {
