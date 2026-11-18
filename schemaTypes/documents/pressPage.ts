@@ -20,14 +20,7 @@ export const pressPage = defineType({
       name: 'language',
       title: 'Language',
       type: 'string',
-      options: {
-        list: [
-          {title: 'Deutsch', value: 'de'},
-          {title: 'English', value: 'en'},
-        ],
-      },
-      initialValue: 'de',
-      validation: (rule) => rule.required(),
+      readOnly: true,
     }),
     defineField({
       name: 'slug',
@@ -59,15 +52,20 @@ export const pressPage = defineType({
       type: 'array',
       of: [
         defineArrayMember({
-          type: 'pressContactSection',
-          options: {modal: {type: 'dialog'}},
+          type: 'reference',
+          name: 'pressContactRef',
+          title: 'Press Contact',
+          to: [{type: 'pressContactSection'}],
         }),
         defineArrayMember({
-          type: 'pressListSection',
-          options: {modal: {type: 'dialog'}},
+          type: 'reference',
+          name: 'pressListRef',
+          title: 'Press List',
+          to: [{type: 'pressListSection'}],
         }),
         defineArrayMember({
           type: 'adBannerSection',
+          title: 'Ad Banner Section',
           options: {modal: {type: 'dialog'}},
         }),
       ],

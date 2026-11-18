@@ -1,6 +1,7 @@
 import {DocumentIcon} from '@sanity/icons/Document'
 import {DocumentsIcon} from '@sanity/icons/Documents'
 import {ImageIcon} from '@sanity/icons/Image'
+import {UserIcon} from '@sanity/icons/User'
 import type {StructureResolver} from 'sanity/structure'
 
 export const structure: StructureResolver = (S) =>
@@ -35,6 +36,14 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('Collections')
             .items([
+              S.listItem()
+                .title('Press Contacts')
+                .icon(UserIcon)
+                .child(S.documentTypeList('pressContactSection').title('Press Contacts')),
+              S.listItem()
+                .title('Press Lists')
+                .icon(DocumentIcon)
+                .child(S.documentTypeList('pressListSection').title('Press Lists')),
               S.listItem()
                 .title('Ads')
                 .icon(ImageIcon)

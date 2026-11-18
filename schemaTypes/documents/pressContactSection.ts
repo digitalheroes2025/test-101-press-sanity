@@ -4,7 +4,7 @@ import {defineField, defineType} from 'sanity'
 export const pressContactSection = defineType({
   name: 'pressContactSection',
   title: 'Press Contact',
-  type: 'object',
+  type: 'document',
   icon: UserIcon,
   fields: [
     defineField({

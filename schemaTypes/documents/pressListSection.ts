@@ -4,7 +4,7 @@ import {defineArrayMember, defineField, defineType} from 'sanity'
 export const pressListSection = defineType({
   name: 'pressListSection',
   title: 'Press List',
-  type: 'object',
+  type: 'document',
   icon: DocumentIcon,
   fields: [
     defineField({
@@ -23,6 +23,9 @@ export const pressListSection = defineType({
       title: 'Items',
       type: 'array',
       of: [defineArrayMember({type: 'pressItem'})],
+      options: {
+        modal: {type: 'dialog'},
+      },
     }),
   ],
   preview: {
